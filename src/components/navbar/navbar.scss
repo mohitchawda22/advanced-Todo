@@ -1,0 +1,30 @@
+.navbar {
+    padding: 15px 40px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .nav-buttons {
+      .nav-button {
+        background: transparent;
+        border: none;
+        margin-left: 20px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &.active {
+          background-color: #1c1a52;
+          color: white;
+          padding: 5px 10px;
+          border-radius: 6px;
+        }
+      }
+    }
+}
