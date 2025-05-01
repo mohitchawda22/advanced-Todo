@@ -26,12 +26,12 @@ function SignIn({onLogin}) {
         <h2>SIGNIN</h2>
         <form className="signin-form" onSubmit={handleSubmit}>
           <label>
-            E-mail 📧:
+            E-mail:
             <input type="email" name='email' value={email} placeholder="Enter your email" required onChange={(e)=>setEmail(e.target.value)}/>
           </label>
 
           <label>
-            Password 🔐:
+            Password:
             <input type="password" name='password' value={password} placeholder="Enter your password" required onChange={(e)=>setPassword(e.target.value)}/>
           </label>
 

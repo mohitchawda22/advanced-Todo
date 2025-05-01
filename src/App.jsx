@@ -2,6 +2,7 @@ import './App.scss'
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import Navbar from './components/navbar/Navbar'
 import Footer from './components/footer/Footer'
+import Profile from "./pages/Profile"
 import { useEffect, useState } from 'react'
 import SignUp from './components/Sign-Up/SignUp'
 import SignIn from './components/Sign-In/SignIn'
@@ -12,6 +13,7 @@ function App() {
   const [currentUser,setCurrentUser]=useState(null)
 
   const handleLogin=(user)=>{
+    localStorage.setItem('currentUser',JSON.stringify(user))
     setCurrentUser(user)
     setPage('dashboard')
   }
@@ -26,6 +28,8 @@ function App() {
     if(SigninUser){
       setCurrentUser(JSON.parse(SigninUser))
       setPage('dashboard')
+    }else{
+      setPage('signin')
     }
   },[])
 
@@ -35,6 +39,7 @@ function App() {
     {page==='signup' && <SignUp setPage={setPage}/>}
     {page==='signin' && <SignIn onLogin={handleLogin}/>}
     {page=== 'dashboard' && <Dashboard user={currentUser}/>}
+    {page==='profile' && <Profile user={currentUser}/>}
     <Footer/>
   </>
   )

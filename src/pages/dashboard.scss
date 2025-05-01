@@ -1,0 +1,91 @@
+.dashboard {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+  
+    button {
+      margin-left: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #0408faee;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: #0084ff;
+      }
+  
+      &.delete {
+        background-color: #f44336;
+  
+        &:hover {
+          background-color: #d32f2f;
+        }
+      }
+  
+      &.edit {
+        background-color: #2196f3;
+  
+        &:hover {
+          background-color: #1976d2;
+        }
+      }
+  
+      &.complete {
+        background-color: #ff9800;
+  
+        &:hover {
+          background-color: #f57c00;
+        }
+      }
+      &.btn{
+        background-color: red;
+      }
+    }
+  
+    input {
+      padding: 0.5rem;
+      width: calc(100% - 100px);
+      margin-right: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+  
+      li {
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+  
+        span {
+          flex: 1;
+        }
+  
+        button {
+          margin-left: 0.25rem;
+        }
+      }
+    }
+  
+    h3 {
+      margin-top: 2rem;
+      color: #555;
+    }
+  }
+  
