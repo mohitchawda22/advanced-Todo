@@ -6,21 +6,25 @@ const Dashboard = ({ user }) => {
     const [newTask, setNewTask] = useState('');
     const [editIndex, setEditIndex] = useState(null);
 
-    const tasksKey = `${user.email}-tasks`;
+    const tasksKey = 'all-tasks'; 
 
     useEffect(() => {
-        const savedTasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
-        setTasks(savedTasks);
-    }, [tasksKey]);
+        const allTasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
+        const userTasks = allTasks.filter(task => task.userId === user.id) // this is filter the current user task from the alltask array
+        setTasks(userTasks);
+    }, [user.id]);
 
     const saveTasks = (updatedTasks) => {
+        const allTasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
+        const updatedAllTasks = allTasks.filter(task => task.userId !== user.id); // this is remove al the task that belong to current user and will replace with the new one 
+        updatedAllTasks.push(...updatedTasks); 
+        localStorage.setItem(tasksKey, JSON.stringify(updatedAllTasks));
         setTasks(updatedTasks);
-        localStorage.setItem(tasksKey, JSON.stringify(updatedTasks));
     };
 
     const AddTask = () => {
         if (!newTask.trim()) return;
-        const newTaskObj = { id: Date.now(), text: newTask, completed: false };
+        const newTaskObj = { userId: user.id, text: newTask, completed: false }; 
         const updatedTasks = [...tasks, newTaskObj];
         saveTasks(updatedTasks);
         setNewTask('');
@@ -40,11 +44,11 @@ const Dashboard = ({ user }) => {
     };
 
     const DeleteTask = (index) => {
-        const updatedTasks = tasks.filter((_, i) => i !== index);
+        const updatedTasks = tasks.filter((v, i) => i !== index);
         saveTasks(updatedTasks);
     };
 
-    const ToggleCompleteTask = (index) => {
+    const CompleteTask = (index) => {
         const updatedTasks = [...tasks];
         updatedTasks[index].completed = !updatedTasks[index].completed;
         saveTasks(updatedTasks);
@@ -52,7 +56,9 @@ const Dashboard = ({ user }) => {
 
     const ClearAll = () => {
         setTasks([]);
-        localStorage.removeItem(tasksKey);
+        const allTasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
+        const updatedAllTasks = allTasks.filter(task => task.userId !== user.id);
+        localStorage.setItem(tasksKey, JSON.stringify(updatedAllTasks));
     };
 
     return (
@@ -71,21 +77,40 @@ const Dashboard = ({ user }) => {
                     <button onClick={AddTask}>Add</button>
                 )}
 
-                <ul>
-                    {tasks.map((task, index) => (
-                        <li key={task.id} style={{
-                            textDecoration: task.completed ? 'line-through' : 'none',
-                            backgroundColor: task.completed ? 'lightgreen' : 'inherit'
-                        }}>
-                            {task.text}
-                            <button onClick={() => EditTask(index)} className='edit'>Edit</button>
-                            <button onClick={() => ToggleCompleteTask(index)} className='complete'>
-                                {task.completed ? 'Undo' : 'Complete'}
-                            </button>
-                            <button onClick={() => DeleteTask(index)} className='delete'>Delete</button>
-                        </li>
-                    ))}
-                </ul>
+                <h3 className='text-center'>Your Tasks</h3>
+                {tasks.filter(task => !task.completed).length === 0 ? (
+                    <p className='text-center'>No tasks available</p>
+                ) : (
+                    <ul>
+                        {tasks.filter(task => !task.completed).map((task, index) => (
+                            <li key={index}>
+                                {task.text}
+                                <button onClick={() => EditTask(index)} className='edit'>Edit</button>
+                                <button onClick={() => CompleteTask(index)} className='complete'>
+                                    Complete
+                                </button>
+                                <button onClick={() => DeleteTask(index)} className='delete'>Delete</button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+                <h3 className='text-center'>Completed Tasks</h3>
+                {tasks.filter(task => task.completed).length === 0 ? (
+                    <p className='text-center'>No tasks completed yet</p>
+                ) : (
+                    <ul>
+                        {tasks.filter(task => task.completed).map((task, index) => (
+                            <li key={index} style={{ textDecoration: 'line-through', backgroundColor: 'lightgreen' }}>
+                                {task.text}
+                                <button onClick={() => CompleteTask(index)} className='undo'>
+                                    Undo
+                                </button>
+                                <button onClick={() => DeleteTask(index)} className='delete'>Delete</button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
                 <div className='d-flex justify-content-center'>
                     <button className='btn btn-danger' onClick={ClearAll}>Clear all tasks</button>
