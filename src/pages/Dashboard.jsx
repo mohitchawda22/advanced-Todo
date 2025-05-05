@@ -4,53 +4,63 @@ import "../pages/dashboard.scss";
 const Dashboard = ({ user }) => {
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState('');
-    const [editIndex, setEditIndex] = useState(null);
+    const [editTaskId, setEditTaskId] = useState(null);
 
-    const tasksKey = 'all-tasks'; 
+    const tasksKey = 'all-tasks';
 
     useEffect(() => {
         const allTasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
-        const userTasks = allTasks.filter(task => task.userId === user.id) // this is filter the current user task from the alltask array
+        const userTasks = allTasks.filter(task => task.userId === user.id);
         setTasks(userTasks);
     }, [user.id]);
 
     const saveTasks = (updatedTasks) => {
         const allTasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
-        const updatedAllTasks = allTasks.filter(task => task.userId !== user.id); // this is remove al the task that belong to current user and will replace with the new one 
-        updatedAllTasks.push(...updatedTasks); 
+        const updatedAllTasks = allTasks.filter(task => task.userId !== user.id);
+        updatedAllTasks.push(...updatedTasks);
         localStorage.setItem(tasksKey, JSON.stringify(updatedAllTasks));
         setTasks(updatedTasks);
     };
 
     const AddTask = () => {
         if (!newTask.trim()) return;
-        const newTaskObj = { userId: user.id, text: newTask, completed: false }; 
+        const newTaskObj = {
+            userId: user.id,
+            taskId: Math.floor(Math.random() * 1000000), //this give unique id's to the todo task 
+            text: newTask,
+            completed: false
+        };
         const updatedTasks = [...tasks, newTaskObj];
         saveTasks(updatedTasks);
         setNewTask('');
     };
 
-    const EditTask = (index) => {
-        setNewTask(tasks[index].text);
-        setEditIndex(index);
+    const EditTask = (taskId) => {
+        const taskToEdit = tasks.find(task => task.taskId === taskId);
+        if (taskToEdit) {
+            setNewTask(taskToEdit.text);
+            setEditTaskId(taskId);
+        }
     };
 
     const UpdateTask = () => {
-        const updatedTasks = [...tasks];
-        updatedTasks[editIndex].text = newTask;
+        const updatedTasks = tasks.map(task =>
+            task.taskId === editTaskId ? { ...task, text: newTask } : task
+        );
         saveTasks(updatedTasks);
         setNewTask('');
-        setEditIndex(null);
+        setEditTaskId(null);
     };
 
-    const DeleteTask = (index) => {
-        const updatedTasks = tasks.filter((v, i) => i !== index);
+    const DeleteTask = (taskId) => {
+        const updatedTasks = tasks.filter(task => task.taskId !== taskId);
         saveTasks(updatedTasks);
     };
 
-    const CompleteTask = (index) => {
-        const updatedTasks = [...tasks];
-        updatedTasks[index].completed = !updatedTasks[index].completed;
+    const CompleteTask = (taskId) => {
+        const updatedTasks = tasks.map(task =>
+            task.taskId === taskId ? { ...task, completed: !task.completed } : task
+        );
         saveTasks(updatedTasks);
     };
 
@@ -71,7 +81,7 @@ const Dashboard = ({ user }) => {
                     onChange={(e) => setNewTask(e.target.value)}
                     placeholder="Add a new task"
                 />
-                {editIndex !== null ? (
+                {editTaskId !== null ? (
                     <button onClick={UpdateTask}>Update</button>
                 ) : (
                     <button onClick={AddTask}>Add</button>
@@ -82,14 +92,14 @@ const Dashboard = ({ user }) => {
                     <p className='text-center'>No tasks available</p>
                 ) : (
                     <ul>
-                        {tasks.filter(task => !task.completed).map((task, index) => (
-                            <li key={index}>
+                        {tasks.filter(task => !task.completed).map((task) => (
+                            <li key={task.taskId}>
                                 {task.text}
-                                <button onClick={() => EditTask(index)} className='edit'>Edit</button>
-                                <button onClick={() => CompleteTask(index)} className='complete'>
+                                <button onClick={() => EditTask(task.taskId)} className='edit'>Edit</button>
+                                <button onClick={() => CompleteTask(task.taskId)} className='complete'>
                                     Complete
                                 </button>
-                                <button onClick={() => DeleteTask(index)} className='delete'>Delete</button>
+                                <button onClick={() => DeleteTask(task.taskId)} className='delete'>Delete</button>
                             </li>
                         ))}
                     </ul>
@@ -100,13 +110,13 @@ const Dashboard = ({ user }) => {
                     <p className='text-center'>No tasks completed yet</p>
                 ) : (
                     <ul>
-                        {tasks.filter(task => task.completed).map((task, index) => (
-                            <li key={index} style={{ textDecoration: 'line-through', backgroundColor: 'lightgreen' }}>
+                        {tasks.filter(task => task.completed).map((task) => (
+                            <li key={task.taskId} style={{ textDecoration: 'line-through', backgroundColor: 'lightgreen' }}>
                                 {task.text}
-                                <button onClick={() => CompleteTask(index)} className='undo'>
+                                <button onClick={() => CompleteTask(task.taskId)} className='undo'>
                                     Undo
                                 </button>
-                                <button onClick={() => DeleteTask(index)} className='delete'>Delete</button>
+                                <button onClick={() => DeleteTask(task.taskId)} className='delete'>Delete</button>
                             </li>
                         ))}
                     </ul>
