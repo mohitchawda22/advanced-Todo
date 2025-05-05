@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import "../pages/dashboard.scss";
+import Weather from '../components/weather/Weather';
+import Gif from '../components/Gif/gif';
+import Calender from '../components/Calender/Calender';
+
 
 const Dashboard = ({ user }) => {
     const [tasks, setTasks] = useState([]);
@@ -72,61 +76,68 @@ const Dashboard = ({ user }) => {
     };
 
     return (
-        <div className="dashboard">
-            <div className="todo-section">
-                <h2 className='text-center'>Add your Task</h2>
-                <input
-                    type="text"
-                    value={newTask}
-                    onChange={(e) => setNewTask(e.target.value)}
-                    placeholder="Add a new task"
-                />
-                {editTaskId !== null ? (
-                    <button onClick={UpdateTask}>Update</button>
-                ) : (
-                    <button onClick={AddTask}>Add</button>
-                )}
+        <>
+            <div className="dashboard">
+                <div className="todo-section">
+                    <h2 className='text-center'>Add your Task</h2>
+                    <input
+                        type="text"
+                        value={newTask}
+                        onChange={(e) => setNewTask(e.target.value)}
+                        placeholder="Add a new task"
+                    />
+                    {editTaskId !== null ? (
+                        <button onClick={UpdateTask}>Update</button>
+                    ) : (
+                        <button onClick={AddTask}>Add</button>
+                    )}
 
-                <h3 className='text-center'>Your Tasks</h3>
-                {tasks.filter(task => !task.completed).length === 0 ? (
-                    <p className='text-center'>No tasks available</p>
-                ) : (
-                    <ul>
-                        {tasks.filter(task => !task.completed).map((task) => (
-                            <li key={task.taskId}>
-                                {task.text}
-                                <button onClick={() => EditTask(task.taskId)} className='edit'>Edit</button>
-                                <button onClick={() => CompleteTask(task.taskId)} className='complete'>
-                                    Complete
-                                </button>
-                                <button onClick={() => DeleteTask(task.taskId)} className='delete'>Delete</button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                    <h3 className='text-center'>Your Tasks</h3>
+                    {tasks.filter(task => !task.completed).length === 0 ? (
+                        <p className='text-center'>No tasks available</p>
+                    ) : (
+                        <ul>
+                            {tasks.filter(task => !task.completed).map((task) => (
+                                <li key={task.taskId}>
+                                    {task.text}
+                                    <button onClick={() => EditTask(task.taskId)} className='edit'>Edit</button>
+                                    <button onClick={() => CompleteTask(task.taskId)} className='complete'>
+                                        Complete
+                                    </button>
+                                    <button onClick={() => DeleteTask(task.taskId)} className='delete'>Delete</button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
 
-                <h3 className='text-center'>Completed Tasks</h3>
-                {tasks.filter(task => task.completed).length === 0 ? (
-                    <p className='text-center'>No tasks completed yet</p>
-                ) : (
-                    <ul>
-                        {tasks.filter(task => task.completed).map((task) => (
-                            <li key={task.taskId} style={{ textDecoration: 'line-through', backgroundColor: 'lightgreen' }}>
-                                {task.text}
-                                <button onClick={() => CompleteTask(task.taskId)} className='undo'>
-                                    Undo
-                                </button>
-                                <button onClick={() => DeleteTask(task.taskId)} className='delete'>Delete</button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                    <h3 className='text-center'>Completed Tasks</h3>
+                    {tasks.filter(task => task.completed).length === 0 ? (
+                        <p className='text-center'>No tasks completed yet</p>
+                    ) : (
+                        <ul>
+                            {tasks.filter(task => task.completed).map((task) => (
+                                <li key={task.taskId} style={{ textDecoration: 'line-through', backgroundColor: 'lightgreen' }}>
+                                    {task.text}
+                                    <button onClick={() => CompleteTask(task.taskId)} className='undo'>
+                                        Undo
+                                    </button>
+                                    <button onClick={() => DeleteTask(task.taskId)} className='delete'>Delete</button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
 
-                <div className='d-flex justify-content-center'>
-                    <button className='btn btn-danger' onClick={ClearAll}>Clear all tasks</button>
+                    <div className='d-flex justify-content-center'>
+                        <button className='btn btn-danger' onClick={ClearAll}>Clear all tasks</button>
+                    </div>
+                </div>
+                <div className='sidebar'>
+                    <Weather></Weather>
+                    <Gif />
+                    <Calender></Calender>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

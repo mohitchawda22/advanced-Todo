@@ -1,10 +1,11 @@
 .navbar {
     padding: 15px 40px;
-    background-color: #fff;
+    background-color: #F5EDED;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 20px #393646;
+    color: #2E073F;
 
     .logo {
       font-size: 24px;
@@ -20,8 +21,8 @@
         cursor: pointer;
 
         &.active {
-          background-color: #1c1a52;
-          color: white;
+          background-color: #AD49E1;
+          color: #F5EDED;
           padding: 5px 10px;
           border-radius: 6px;
         }

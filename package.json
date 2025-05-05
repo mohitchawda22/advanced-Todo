@@ -12,6 +12,7 @@
   "dependencies": {
     "advanced_todos": "file:",
     "bootstrap": "^5.3.5",
+    "mdb-ui-kit": "^9.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.87.0"

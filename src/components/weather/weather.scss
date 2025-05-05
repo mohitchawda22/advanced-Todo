@@ -1,0 +1,21 @@
+.weather-container {
+    background-color: #a4a6a8;
+    border: 1px solid #a09696;
+    border-radius: 12px;
+    padding: 16px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.weather-container h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: #333;
+}
+
+.weather-container p {
+    margin: 4px 0;
+    font-size: 16px;
+    color: #000000;
+}

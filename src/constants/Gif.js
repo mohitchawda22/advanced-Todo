@@ -1,0 +1,1 @@
+export const GIFKEY="AIzaSyCkMW1FYCswlfQ-RJxVBCofmIEskqmx8wc"
